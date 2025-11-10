@@ -13,8 +13,8 @@ function createNote() {
 	noteDiv.innerHTML = "Click to edit content";
 	// Moving
 	noteDiv.style.position = "absolute";
-	noteDiv.style.top = "0px";
-	noteDiv.style.left = "0px";
+	noteDiv.style.top = "100px";
+	noteDiv.style.left = "100px";
 	// Mouse position when started
 	noteDiv.offsetX = 0;
 	noteDiv.offsetY = 0;
@@ -51,7 +51,10 @@ $(document).ready(function(){
 	});
 	// Moving the notes
 	var timeoutId = 0;
+	var selectedElem = null;
 	$("body").on("mousedown", ".note", function() {
+		// Set selectedElem
+		selectedElem = $(this);
 		// Set initial offset values
 		$(this)[0].offsetX = mouseX - parseInt($(this).css("left"));
 		$(this)[0].offsetY = mouseY - parseInt($(this).css("top"));
@@ -62,5 +65,13 @@ $(document).ready(function(){
 		}, 10);
 	}).on("mouseup ", function() {
 		clearTimeout(timeoutId);
+		selectedElem = null;
+	});
+	// Trash
+	$("#trash").hover(function() {
+			console.log("adsda");
+		if (selectedElem != null) {
+			selectedElem.css("background-color", "red");
+		}
 	});
 }); 
