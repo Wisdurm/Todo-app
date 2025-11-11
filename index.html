@@ -15,13 +15,18 @@
 				font-family: sans-serif;
 				padding: 1em;
 			}
-			#trash {
-				width: 10em;
+			.trash {
 				height: 10em;
 				position: absolute;
+				z-index: 9999999;
+			}
+			#trash {
 				right: 20px;
 				bottom: 20px;
-				z-index: 9999999;
+			}
+			#trashlid {
+				right: 20px;
+				bottom: 20px;
 			}
 			.selectDisable {
 				-webkit-user-select: none;
@@ -42,6 +47,7 @@
 	<body>
 		<h1>Todo list</h1>
 		<button id="addNote">Add note</button>
-		<img id="trash" class="selectDisable" src="https://freesvg.org/img/johnny-automatic-trash-can.png">
+		<img id="trashlid" class="trash selectDisable" src="trashlid.svg">
+		<img id="trash" class="trash selectDisable" src="trash.svg">
 	</body>
 </html>

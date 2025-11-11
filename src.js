@@ -9,8 +9,8 @@ function createNote(jsonBase) {
 	let noteDiv = document.createElement("div");
 	if (jsonBase) {
 		noteDiv.id = jsonBase.id;
-		if (jsonBase.id >= noteCounter) {
-			noteCounter = jsonBase.id + 1; // Not the cleanest solution but it works
+		if (jsonBase.id.replace(/^\D+/g, '') >= noteCounter) {
+			noteCounter = Number(jsonBase.id.replace(/^\D+/g, '')) + 1; // Not the cleanest solution but it works
 		}
 	}
 	else {
@@ -57,7 +57,7 @@ function textAreaAdjust(element) {
   element.style.width = "1px";
   element.style.width = (25+element.scrollWidth)+"px";
   element.style.height = "1px";
-  element.style.height = (25+element.scrollHeight)+"px";
+  element.style.height = (element.scrollHeight)+"px";
 }
 
 function storeNote(noteElem) {
@@ -71,7 +71,7 @@ function storeNote(noteElem) {
 }
 
 function deleteNote(noteElem) {
-	localStorage.removeItem(noteElem.id)
+	localStorage.removeItem(noteElem.id);
 }
 
 $(document).ready(function(){
