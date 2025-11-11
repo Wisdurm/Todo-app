@@ -1,6 +1,8 @@
 var noteCounter = 0;
 var mouseX = 0;
 var mouseY = 0;
+
+var password = "";
 /**
  * Creates a note and adds it to the document
  * @constructor
@@ -9,9 +11,6 @@ function createNote(jsonBase) {
 	let noteDiv = document.createElement("div");
 	if (jsonBase) {
 		noteDiv.id = jsonBase.id;
-		if (jsonBase.id.replace(/^\D+/g, '') >= noteCounter) {
-			noteCounter = Number(jsonBase.id.replace(/^\D+/g, '')) + 1; // Not the cleanest solution but it works
-		}
 	}
 	else {
 		noteDiv.id = `note${noteCounter}`;
@@ -67,7 +66,7 @@ function storeNote(noteElem) {
 		x: noteElem.style.left,
 		y: noteElem.style.top
 	};
-	localStorage.setItem(noteElem.id, JSON.stringify(noteJson));
+	localStorage.setItem(noteElem.id, CryptoJS.AES.encrypt(JSON.stringify(noteJson), password));
 }
 
 function deleteNote(noteElem) {
@@ -116,27 +115,53 @@ $(document).ready(function(){
 		if (trashing) { // Delete item
 			deleteNote(selectedElem[0]);
 			selectedElem.remove();
+			$("#trashlid").animate({bottom: "20px"});
 		}
 		selectedElem = null;
 	});
 	// Trash
 	$("#trash").hover(function() {
 		if (selectedElem != null) {
+			$("#trashlid").animate({bottom: "40px"});
 			selectedElem.css("background-color", "red");
 		}
 		trashing = true;
 	}).on("mouseleave", function() {
+		$("#trashlid").animate({bottom: "20px"});
 		if (selectedElem != null) {
 			selectedElem.css("background-color", "yellow");
 		}
 		trashing = false;
 	});
 
+	// Get pass from input
+	password=$('#pass')[0].value
 	// Get notes from localStorage
-	for (var i in Object.keys(localStorage)) {
-		const key = Object.keys(localStorage)[i];
-		const noteJson = JSON.parse(localStorage.getItem(key));
-		noteJson.id = Object.keys(localStorage)[i];
-		createNote(noteJson);
+	if (password.length > 0) {
+		for (var i in Object.keys(localStorage)) {
+			const key = Object.keys(localStorage)[i];
+			// Increment note counter here even if the note is not spawned so
+			// localStorage is not overwritten
+			if (key.replace(/^\D+/g, '') >= noteCounter) {
+				noteCounter = Number(key.replace(/^\D+/g, '')) + 1; // Not the cleanest solution but it works
+			}
+			// msg in localStorage
+			msg = "";
+			try {
+				msg = CryptoJS.AES.decrypt(localStorage.getItem(key), password).toString(CryptoJS.enc.Utf8);
+			} catch (e) {
+				continue;
+			}
+			// the json object
+			noteJson = "";
+			try {
+				noteJson = JSON.parse(msg);
+			} catch (error) {
+				continue;
+			}
+			noteJson.id = Object.keys(localStorage)[i];
+			createNote(noteJson);
+
+		}
 	}
 }); 

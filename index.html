@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width" />
 		<title>Todo list app</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js" integrity="sha256-/H4YS+7aYb9kJ5OKhFYPUjSJdrtV6AeyJOtTkw6X72o=" crossorigin="anonymous"></script>
 		<script src="src.js" charset="utf-8"></script>
 		<style type="text/css" media="screen">
 			.note{
@@ -16,7 +17,7 @@
 				padding: 1em;
 			}
 			.trash {
-				height: 10em;
+				height: 8em;
 				position: absolute;
 				z-index: 9999999;
 			}
@@ -47,6 +48,9 @@
 	<body>
 		<h1>Todo list</h1>
 		<button id="addNote">Add note</button>
+		<br>
+		<label for="pass">Password:</label>
+		<input type="text" id="pass" onkeydown="password=$('#pass')[0].value">
 		<img id="trashlid" class="trash selectDisable" src="trashlid.svg">
 		<img id="trash" class="trash selectDisable" src="trash.svg">
 	</body>
